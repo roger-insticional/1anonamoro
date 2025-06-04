@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roger & Yasmim: Nosso Primeiro Ano Juntos</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- URL corrigida para a biblioteca Lucide (versão UMD) -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFF0F5; /* Rosa bem clarinho */
+        }
+        .cursive-font {
+            font-family: 'Dancing Script', cursive;
+        }
+        .gold-text {
+            color: #DAA520; /* Dourado */
+        }
+        .section {
+            display: none; /* Todas as seções começam escondidas */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .section.active {
+            display: block; /* Seção ativa é mostrada */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Estilos para a Linha do Tempo */
+        .timeline-item {
+            position: relative;
+            padding-bottom: 2rem;
+            padding-left: 2.5rem; 
+        }
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+        .timeline-item::before { 
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #DAA520; 
+        }
+        .timeline-item::after { 
+            content: '';
+            position: absolute;
+            left: -6px; 
+            top: 5px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background-color: #DAA520; 
+            border: 2px solid #FFF0F5; 
+        }
+        /* Estilos para Vouchers */
+        .voucher {
+            border: 2px dashed #DAA520;
+            background-image: radial-gradient(#DAA520 1px, transparent 1px);
+            background-size: 10px 10px;
+        }
+        /* Estilo para o modal */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.6); 
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+            max-width: 600px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .loading-message {
+            display: none; 
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            color: #555;
+        }
+        .memory-box { /* Mantido caso você queira reutilizar a seção de memórias no futuro */
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .memory-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(218, 165, 32, 0.3); 
+        }
+        .nav-link i {
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body class="bg-pink-50 text-gray-800">
+
+    <!-- Cabeçalho e Navegação -->
+    <header class="bg-rose-200 shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="text-2xl cursive-font gold-text mb-4 md:mb-0">
+                    Roger & Yasmim: 1 Ano de Namoro
+                </div>
+                <div class="flex flex-wrap justify-center space-x-1 md:space-x-2">
+                    <a href="#" class="nav-link text-rose-700 hover:gold-text px-2 py-1 rounded flex items-center" data-target="home"><i data-lucide="home" class="w-4 h-4"></i>Início</a>
+                    <a href="#" class="nav-link text-rose-700 hover:gold-text px-2 py-1 rounded flex items-center" data-target="timeline"><i data-lucide="milestones" class="w-4 h-4"></i>Linha do Tempo</a>
+                    <a href="#" class="nav-link text-rose-700 hover:gold-text px-2 py-1 rounded flex items-center" data-target="map"><i data-lucide="map-pinned" class="w-4 h-4"></i>Nosso Mapa</a>
+                    <a href="#" class="nav-link text-rose-700 hover:gold-text px-2 py-1 rounded flex items-center" data-target="letter"><i data-lucide="mail" class="w-4 h-4"></i>Carta</a>
+                    <a href="#" class="nav-link text-rose-700 hover:gold-text px-2 py-1 rounded flex items-center" data-target="reasons"><i data-lucide="heart" class="w-4 h-4"></i>365 Motivos</a>
+                    <a href="#" class="nav-link text-rose-700 hover:gold-text px-2 py-1 rounded flex items-center" data-target="quiz"><i data-lucide="puzzle" class="w-4 h-4"></i>Quiz</a>
+                    <a href="#" class="nav-link text-rose-700 hover:gold-text px-2 py-1 rounded flex items-center" data-target="countdown"><i data-lucide="timer" class="w-4 h-4"></i>Contagem</a>
+                    <a href="#" class="nav-link text-rose-700 hover:gold-text px-2 py-1 rounded flex items-center" data-target="vouchers"><i data-lucide="ticket" class="w-4 h-4"></i>Vouchers</a>
+                    <a href="#" class="nav-link text-rose-700 hover:gold-text px-2 py-1 rounded flex items-center" data-target="messages"><i data-lucide="message-circle" class="w-4 h-4"></i>Recados</a>
+                    <!-- O link para "Surpresa" foi removido no HTML fornecido pelo usuário, mantendo essa alteração -->
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="container mx-auto p-4 md:p-8">
+
+        <!-- Seção Inicial -->
+        <section id="home" class="section active">
+            <div class="relative h-[60vh] md:h-[80vh] rounded-lg shadow-xl overflow-hidden">
+                <img src="https://placehold.co/1200x800/FFC0CB/333333?text=Nossa+Conexão+Especial+(Roger+e+Yasmim)" 
+                     alt="Roger e Yasmim - Conexão Especial" 
+                     class="absolute inset-0 w-full h-full object-cover"
+                     onerror="this.onerror=null;this.src='https://placehold.co/1200x800/FFC0CB/333333?text=Erro+ao+carregar+foto';">
+                <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-center p-4">
+                    <h1 class="cursive-font text-4xl sm:text-5xl md:text-7xl text-white drop-shadow-lg">
+                        Um ano conectados, infinitas memórias...
+                    </h1>
+                    <p class="text-rose-100 mt-4 text-lg md:text-xl">E que nossa história virtual continue a nos aproximar cada dia mais.</p>
+                    <div class="mt-8">
+                        <p class="text-white mb-2">Uma pequena declaração para você, Yasmim:</p>
+                        <div class="bg-rose-100 p-4 rounded-lg shadow-md text-rose-700">
+                            <!-- Texto corrigido -->
+                            <p>Oi, Yasmim, meu amor! Se você está vendo isto, é porque estamos completando 1 ano de namoro. Apenas saiba que eu te amo muitão, você é a pessoa mais especial que já me apareceu. Eu te amo muito e espero que goste!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Linha do Tempo -->
+        <section id="timeline" class="section">
+            <h2 class="cursive-font text-4xl gold-text text-center mb-8 flex items-center justify-center"><i data-lucide="milestones" class="w-10 h-10 mr-3"></i>Nossa Jornada de Amor Virtual</h2>
+            <div class="max-w-3xl mx-auto">
+                <div class="timeline-item">
+                    <!-- Texto corrigido -->
+                    <h3 class="text-xl font-semibold text-rose-700 mb-1">O Dia em que Assumi Minha Paixão - 03/06/2024</h3>
+                    <img src="/primeiradeclaracao.jpg" alt="Nosso Primeiro Contato" class="rounded-lg shadow-md my-2 w-full md:w-2/3" onerror="this.onerror=null;this.src='https://placehold.co/600x400/FFC0CB/333333?text=Erro+Foto';">
+                    <!-- Texto corrigido -->
+                    <p class="text-gray-600">Quem diria que, no meio de uma discussão sobre seu ex, eu decidiria me declarar para você?</p>
+                </div>
+                <div class="timeline-item">
+                    <!-- Texto corrigido -->
+                    <h3 class="text-xl font-semibold text-rose-700 mb-1">Quando Você Decidiu Me Apelidar - 09/07/2024</h3>
+                     <img src="/Toranja.jpg" alt="Apelido Toranjinha" class="rounded-lg shadow-md my-2 w-full md:w-2/3" onerror="this.onerror=null;this.src='https://placehold.co/600x400/FFC0CB/333333?text=Erro+Foto';">
+                    <!-- Texto corrigido -->
+                    <p class="text-gray-600">O dia em que virei sua "toranjinha" (mesmo sendo apelido de um dorama 🙄).</p>
+                </div>
+                <div class="timeline-item">
+                    <!-- Texto corrigido -->
+                    <h3 class="text-xl font-semibold text-rose-700 mb-1">Nossa Primeira Tentativa de Maratona - 13/06/2024</h3>
+                    <img src="/RaveMaratona.jpg" alt="Tentativa de Maratona no Rave" class="rounded-lg shadow-md my-2 w-full md:w-2/3" onerror="this.onerror=null;this.src='https://placehold.co/600x400/FFC0CB/333333?text=Erro+Foto';">
+                    <!-- Texto corrigido -->
+                    <p class="text-gray-600">Lembra quando dei a ideia de assistirmos Gumball no Rave? Poxa, pena que não deu certo, mas continua sendo uma lembrança boa!</p>
+                </div>
+                <div class="timeline-item">
+                    <!-- Texto corrigido -->
+                    <h3 class="text-xl font-semibold text-rose-700 mb-1">A Primeira Call "Mimindo" - 21/07/2024</h3>
+                     <img src="/CallMimindo.jpg" alt="Primeira Call Dormindo" class="rounded-lg shadow-md my-2 w-full md:w-2/3" onerror="this.onerror=null;this.src='https://placehold.co/600x400/FFC0CB/333333?text=Erro+Foto';">
+                    <p class="text-gray-600">Te ouvir roncando pela primeira vez, mesmo distante, foi como uma melodia aos meus ouvidos.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Caixa de Memórias Virtuais (removida pelo usuário no HTML fornecido, mantendo a remoção) -->
+        <!-- <section id="memories" class="section"> ... </section> -->
+
+        <!-- Seção Nosso Mapa do Amor Virtual -->
+        <section id="map" class="section">
+            <h2 class="cursive-font text-4xl gold-text text-center mb-8 flex items-center justify-center"><i data-lucide="map-pinned" class="w-10 h-10 mr-3"></i>Nosso Mapa do Amor Virtual</h2>
+            <div class="bg-white p-6 rounded-lg shadow-xl max-w-3xl mx-auto text-center">
+                <p class="text-gray-700 mb-4">De Uberaba (Minas Gerais) a Salvador (Bahia), nosso amor não conhece fronteiras!</p>
+                <img src="https://placehold.co/800x500/FFF0F5/DAA520?text=Mapa:+Uberaba+(Roger)+%3C-%3E+Salvador+(Yasmim)" 
+                     alt="Mapa conectando Uberaba-MG e Salvador-BA" 
+                     class="rounded-lg shadow-md mx-auto my-4"
+                     onerror="this.onerror=null;this.src='https://placehold.co/800x500/FFF0F5/DAA520?text=Erro+ao+carregar+mapa';">
+                <p class="text-gray-600 mt-2">Cada cidade guarda um pedaço do nosso coração, e a tecnologia é a ponte que nos une todos os dias.</p>
+                <p class="text-sm text-rose-500 mt-4">Mal podemos esperar para que essas linhas pontilhadas se tornem caminhos reais para o nosso encontro!</p>
+            </div>
+        </section>
+
+        <!-- Seção Carta Digital -->
+        <section id="letter" class="section">
+            <h2 class="cursive-font text-4xl gold-text text-center mb-8 flex items-center justify-center"><i data-lucide="mail-heart" class="w-10 h-10 mr-3"></i>De Coração Aberto, Através dos Pixels</h2>
+            <div class="bg-white p-6 md:p-10 rounded-lg shadow-xl max-w-3xl mx-auto">
+                <!-- Texto corrigido -->
+                <textarea id="digitalLetterContent" class="w-full h-64 p-3 border border-rose-200 rounded-md text-gray-700 leading-relaxed text-lg focus:ring-2 focus:ring-rose-300 focus:border-transparent" placeholder="Comece a escrever sua carta aqui...">Minha Yasmim,
+
+Escrever esta carta é tentar colocar em palavras a imensidão de sentimentos que floresceram neste 1 ano de namoro. De Uberaba a Salvador, cada mensagem, cada chamada, construiu a ponte mais linda entre nós... 
+Mesmo com os quilômetros que nos separam, sinto você tão perto. Aprendi que o amor não conhece barreiras geográficas quando a conexão é verdadeira como a nossa.
+
+Você me ensinou que, mesmo distantes, podemos compartilhar risadas, lágrimas e sonhos. A cada dia que passa, descubro mais motivos para te amar: desde as nossas conversas sobre tudo e nada, até os momentos de silêncio compartilhado que falam mais do que mil palavras.
+Lembro-me daquele dia em que você me chamou para assistirmos "anime" juntos, mesmo que cada um em sua casa. Foi como se estivéssemos lado a lado, rindo e chorando com os personagens, sentindo a mesma emoção. Esses pequenos momentos se tornaram grandes memórias que guardo com carinho.
+
+Com todo o meu amor, que viaja em cada byte de Uberaba para Salvador,
+Roger</textarea>
+                <!-- Botão de IA para carta foi removido no HTML fornecido pelo usuário, mantendo essa alteração -->
+                <div id="letterLoading" class="loading-message">Gerando inspiração... Por favor, aguarde.</div>
+                <div id="inspiredLetterSection" class="mt-6 p-4 bg-rose-50 border-l-4 border-rose-400 rounded-md" style="display: none;">
+                    <h4 class="font-semibold text-rose-700 mb-2">Sugestão da IA:</h4>
+                    <p id="inspiredLetterText" class="text-gray-700 whitespace-pre-wrap"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 365 Motivos para Amá-la -->
+        <section id="reasons" class="section">
+            <h2 class="cursive-font text-4xl gold-text text-center mb-8 flex items-center justify-center"><i data-lucide="heart-handshake" class="w-10 h-10 mr-3"></i>365 Motivos (e contando!) para Amar Yasmim</h2>
+            <div class="bg-white p-6 rounded-lg shadow-xl max-w-2xl mx-auto">
+                <p class="text-center text-gray-700 mb-6">Motivos Para Amar a Pequena Yasmim :</p>
+                <ul id="reasonsList" class="list-disc list-inside space-y-2 text-rose-700">
+                    <!-- Textos corrigidos -->
+                    <li>Dia 1: Suas risadas, que enchem meu coração de amor.</li>
+                    <li>Dia 27: A forma como você se dedica para seguir em frente me faz perceber o quanto você é especial.</li>
+                    <li>Dia 88: Sua paciência (🙄) para me aturar todos os dias me deixa completamente apaixonado.</li>
+                    <li>Dia 153: Sua voz que é meu porto seguro, mesmo a quilômetros entre Minas e Bahia.</li>
+                    <li>Dia 240: Seu jeitinho "chorona" me faz querer cuidar de você como um neném.</li>
+                    <li>Dia 365: Por ser exatamente quem você é, Yasmim, e por me fazer tão feliz, provando que o amor virtual é real e forte!</li>
+                </ul>
+                <div id="reasonsLoading" class="loading-message">Gerando mais motivos... Por favor, aguarde.</div>
+                <div id="generatedReasonsSection" class="mt-6 p-4 bg-rose-50 border-l-4 border-rose-400 rounded-md" style="display: none;">
+                    <h4 class="font-semibold text-rose-700 mb-2">Novos Motivos Sugeridos pela IA:</h4>
+                    <ul id="generatedReasonsList" class="list-disc list-inside space-y-2 text-rose-700"></ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Quiz Divertido -->
+        <section id="quiz" class="section">
+            <h2 class="cursive-font text-4xl gold-text text-center mb-8 flex items-center justify-center"><i data-lucide="puzzle" class="w-10 h-10 mr-3"></i>O Quanto Nos Conhecemos (Virtualmente)?</h2>
+            <div class="bg-white p-6 rounded-lg shadow-xl max-w-xl mx-auto">
+                <form id="coupleQuiz">
+                    <div class="mb-6">
+                        <label class="block text-rose-700 font-semibold mb-2">1. Quem mandou o primeiro "Eu te amo" por mensagem?</label>
+                        <div class="space-y-1">
+                            <div><input type="radio" name="q1" value="a" id="q1a" class="mr-2"><label for="q1a">Roger</label></div>
+                            <div><input type="radio" name="q1" value="b" id="q1b" class="mr-2"><label for="q1b">Yasmim</label></div>
+                            <div><input type="radio" name="q1" value="c" id="q1c" class="mr-2"><label for="q1c">Foi uma troca mútua na videochamada!</label></div>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-rose-700 font-semibold mb-2">2. Qual nosso jogo online favorito para jogar juntos?</label>
+                        <div class="space-y-1">
+                            <div><input type="radio" name="q2" value="a" id="q2a" class="mr-2"><label for="q2a">Roblox</label></div>
+                            <div><input type="radio" name="q2" value="b" id="q2b" class="mr-2"><label for="q2b">Minecraft</label></div>
+                            <div><input type="radio" name="q2" value="c" id="q2c" class="mr-2"><label for="q2c">Qualquer um, desde que a gente se divirta!</label></div>
+                        </div>
+                    </div>
+                     <div class="mb-6">
+                        <label class="block text-rose-700 font-semibold mb-2">3. Qual foi a primeira série que maratonamos "juntos" online?</label>
+                        <div class="space-y-1">
+                            <div><input type="radio" name="q3" value="a" id="q3a" class="mr-2"><label for="q3a">Beleza Verdadeira (dorama)</label></div>
+                            <div><input type="radio" name="q3" value="b" id="q3b" class="mr-2"><label for="q3b">Euphoria</label></div>
+                            <div><input type="radio" name="q3" value="c" id="q3c" class="mr-2"><label for="q3c">Ainda estamos decidindo qual será a primeira!</label></div>
+                        </div>
+                    </div>
+                    <button type="button" id="submitQuiz" class="bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 px-4 rounded-lg w-full transition-colors">Ver Resultado!</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Seção Contagem Regressiva -->
+        <section id="countdown" class="section">
+            <h2 class="cursive-font text-4xl gold-text text-center mb-8 flex items-center justify-center"><i data-lucide="calendar-heart" class="w-10 h-10 mr-3"></i>Contando os Segundos Para...</h2>
+            <div class="bg-white p-6 rounded-lg shadow-xl max-w-md mx-auto text-center">
+                <p class="text-rose-700 text-xl mb-2">Nosso Aniversário de 2 Anos de Amor Conectado!</p>
+                <div id="countdownTimer" class="text-3xl md:text-4xl font-bold text-rose-600">
+                    Calculando...
+                </div>
+                <p class="text-gray-600 mt-4 text-sm">Mal posso esperar pelo que o futuro nos reserva, Yasmim!</p>
+            </div>
+        </section>
+
+        <!-- Seção Voucher Virtual -->
+        <section id="vouchers" class="section">
+            <!-- Título corrigido -->
+            <h2 class="cursive-font text-4xl gold-text text-center mb-8 flex items-center justify-center"><i data-lucide="ticket-percent" class="w-10 h-10 mr-3"></i>Mimos Virtuais Especiais Para Você, Meu Amor!</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <div class="voucher bg-rose-50 p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-xl font-semibold text-rose-700 mb-2">Vale um Pedido no iFood</h3>
+                    <p class="text-gray-600">Para encher sua barriguinha, amor!</p>
+                    <p class="text-xs gold-text mt-2">Válido a partir de... agora!</p>
+                </div>
+                <div class="voucher bg-rose-50 p-6 rounded-lg shadow-md text-center">
+                    <h3 class="text-xl font-semibold text-rose-700 mb-2">Vale Uma Noite de Filmes Sincronizados</h3>
+                    <p class="text-gray-600">Sua escolha de filme, lanchinhos virtuais e meus comentários em tempo real!</p>
+                    <p class="text-xs gold-text mt-2">Resgatável a qualquer momento!</p>
+                </div>
+                <div class="voucher bg-rose-50 p-6 rounded-lg shadow-md text-center">
+                     <!-- Texto corrigido -->
+                    <h3 class="text-xl font-semibold text-rose-700 mb-2">Vale uma Comprinha Online (não exagera 😉)</h3>
+                    <p class="text-gray-600">Pode escolher algo para comprar, que seu namorado superespecial vai te dar!</p>
+                    <p class="text-xs gold-text mt-2">Resgatável a qualquer momento!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Mural de Recados -->
+        <section id="messages" class="section">
+            <h2 class="cursive-font text-4xl gold-text text-center mb-8 flex items-center justify-center"><i data-lucide="messages-square" class="w-10 h-10 mr-3"></i>Carinho de Amigos e Família Para Roger & Yasmim</h2>
+            <div class="bg-white p-6 rounded-lg shadow-xl max-w-2xl mx-auto">
+                <p class="text-center text-gray-700 mb-6">Um espaço para aqueles que amamos deixarem uma mensagem especial para nosso casal conectado. (Obs: Esta é uma demonstração.)</p>
+                <div class="space-y-4">
+                    <div class="bg-rose-50 p-4 rounded-md shadow">
+                        <!-- Texto corrigido/mantido (piada interna) -->
+                        <p class="text-gray-700">"Roger e Yasmim, que casal lindo! Que a conexão de vocês só se fortaleça! ❤️" - <strong class="text-rose-600">Julia (Amante da Yasmim)</strong></p>
+                    </div>
+                    <div class="bg-rose-50 p-4 rounded-md shadow">
+                         <!-- Texto corrigido/mantido (piada interna) -->
+                        <p class="text-gray-700">"Parabéns pelo primeiro ano, pombinhos virtuais! Torcendo pelo encontro! 🎉" - <strong class="text-rose-600">Tatuane Falsiane</strong></p>
+                    </div>
+                    <div class="bg-rose-50 p-4 rounded-md shadow">
+                         <!-- Texto corrigido/mantido (piada interna) -->
+                        <p class="text-gray-700">"Incrivel que nesse casal, o Roger sempre está certo!" - <strong class="text-rose-600">Anônimo2002</strong></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção Surpresa Final (removida pelo usuário no HTML fornecido, mantendo a remoção) -->
+        <!-- <section id="surprise" class="section"> ... </section> -->
+
+        <!-- Seção Playlist -->
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="text-center p-6 mt-12 bg-rose-200">
+        <p class="text-rose-700 cursive-font text-xl">Feito com todo o amor do mundo, para nós, Roger & Yasmim.</p>
+        <p class="text-sm text-rose-600 mt-1">© <span id="currentYear"></span> Roger & Yasmim</p>
+    </footer>
+
+    <!-- Modal para Caixa de Memórias e Quiz -->
+    <div id="itemModal" class="modal">
+        <div class="modal-content bg-rose-50">
+            <span class="close-button" id="closeItemModal">×</span>
+            <h3 id="modalTitle" class="cursive-font text-3xl gold-text mb-4"></h3>
+            <img id="modalImage" src="" alt="Memória" class="max-w-full max-h-[50vh] mx-auto rounded-lg mb-4" style="display:none;">
+            <p id="modalDescription" class="text-rose-700"></p>
+        </div>
+    </div>
+
+    <script>
+        // Garante que createIcons seja chamado após Lucide estar disponível.
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        } else {
+            document.addEventListener('DOMContentLoaded', () => {
+                if (typeof lucide !== 'undefined') { // Verifica novamente dentro do listener
+                    lucide.createIcons();
+                } else {
+                    console.error("Lucide library not loaded even after DOMContentLoaded.");
+                }
+            });
+        }
+        
+        // Script para navegação entre seções
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section');
+        const homeSection = document.getElementById('home');
+
+        if (homeSection) {
+            homeSection.classList.add('active');
+        }
+        navLinks.forEach(link => {
+            if (link.dataset.target === 'home') {
+                link.classList.add('gold-text', 'font-semibold');
+                link.classList.remove('text-rose-700');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const targetId = link.dataset.target;
+                
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                navLinks.forEach(navLink => {
+                     navLink.classList.remove('gold-text', 'font-semibold');
+                     navLink.classList.add('text-rose-700');
+                });
+
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+                link.classList.add('gold-text', 'font-semibold');
+                link.classList.remove('text-rose-700');
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // Script para Contagem Regressiva
+        const countdownTimer = document.getElementById('countdownTimer');
+        const anniversaryDate = new Date(new Date().getFullYear() + 1, 5, 4).getTime(); // Junho é mês 5 (0-indexado)
+
+        if (countdownTimer) {
+            const updateCountdown = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = anniversaryDate - now;
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownTimer.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+                if (distance < 0) {
+                    clearInterval(updateCountdown);
+                    countdownTimer.innerHTML = "Feliz Aniversário de Amor Conectado!";
+                }
+            }, 1000);
+        }
+        
+        // Script para Modals (Caixa de Memórias e Quiz)
+        const itemModal = document.getElementById('itemModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalImage = document.getElementById('modalImage');
+        const modalDescription = document.getElementById('modalDescription');
+        const closeItemModalButton = document.getElementById('closeItemModal');
+
+        // Caixa de Memórias (mantido caso você adicione a seção de volta)
+        const memoryBoxes = document.querySelectorAll('.memory-box');
+        memoryBoxes.forEach(box => {
+            box.addEventListener('click', () => {
+                modalTitle.textContent = box.dataset.memoryTitle;
+                if (box.dataset.memoryImage) {
+                    modalImage.src = box.dataset.memoryImage;
+                    modalImage.alt = box.dataset.memoryTitle;
+                    modalImage.style.display = 'block';
+                } else {
+                    modalImage.style.display = 'none';
+                }
+                modalDescription.textContent = box.dataset.memoryDescription;
+                itemModal.style.display = "block";
+            });
+        });
+        
+        // Quiz
+        const submitQuizButton = document.getElementById('submitQuiz');
+        if (submitQuizButton) {
+            submitQuizButton.addEventListener('click', () => {
+                modalTitle.textContent = "Resultado do Quiz!";
+                modalImage.style.display = 'none'; 
+                modalDescription.textContent = "Nossa conexão é incrível e nos conhecemos super bem, mesmo através das telas! Cada detalhe da nossa história virtual é especial. Te amo, Yasmim! ❤️ - Roger";
+                itemModal.style.display = "block";
+            });
+        }
+
+        if (closeItemModalButton) {
+            closeItemModalButton.onclick = function() {
+                itemModal.style.display = "none";
+            }
+        }
+        
+        window.onclick = function(event) {
+            if (event.target == itemModal) {
+                itemModal.style.display = "none";
+            }
+        }
+
+        // Atualizar ano no rodapé
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // --- Funcionalidades com Gemini API ---
+        const apiKey = ""; 
+
+        async function callGeminiAPI(prompt) {
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+            const payload = { contents: chatHistory };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    console.error("Erro na API Gemini:", response.status, errorBody);
+                    return `Desculpe, houve um erro ao contatar a IA (${response.status}). Tente novamente mais tarde. Detalhes: ${errorBody}`;
+                }
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    return result.candidates[0].content.parts[0].text;
+                } else {
+                    console.error("Resposta inesperada da API Gemini:", result);
+                    return "Desculpe, a IA não conseguiu gerar uma resposta no momento.";
+                }
+            } catch (error) {
+                console.error("Erro ao chamar a API Gemini:", error);
+                return "Ocorreu um erro de conexão ao tentar usar a IA. Verifique sua internet.";
+            }
+        }
+
+        // Botão de IA para carta foi removido no HTML fornecido pelo usuário, mantendo essa alteração
+        // const inspireLetterButton = document.getElementById('inspireLetterButton');
+        // ... (código relacionado ao botão da carta)
+
+        const generateReasonsButton = document.getElementById('generateReasonsButton');
+        const reasonsList = document.getElementById('reasonsList'); 
+        const generatedReasonsSection = document.getElementById('generatedReasonsSection');
+        const generatedReasonsList = document.getElementById('generatedReasonsList');
+        const reasonsLoading = document.getElementById('reasonsLoading');
+
+        if (generateReasonsButton && reasonsList && generatedReasonsSection && generatedReasonsList && reasonsLoading) {
+            generateReasonsButton.addEventListener('click', async () => {
+                reasonsLoading.style.display = "block";
+                generatedReasonsSection.style.display = "none";
+                generateReasonsButton.disabled = true;
+                generatedReasonsList.innerHTML = ""; 
+
+                const existingReasons = Array.from(reasonsList.querySelectorAll('li')).slice(0, 3).map(li => li.textContent).join("\n");
+                
+                const prompt = `Eu sou Roger (de Uberaba-MG) e minha namorada virtual é Yasmim (de Salvador-BA). Estamos comemorando 1 ano de namoro. Crie de 3 a 5 novos motivos curtos e românticos para eu amar Yasmim. Os motivos devem focar em aspectos únicos do nosso relacionamento à distância, como a forma que superamos os desafios, a alegria das nossas videochamadas, ou pequenos gestos virtuais que significam muito. Evite repetir os exemplos abaixo e seja criativo e específico para um casal que se ama entre Uberaba e Salvador.
+Exemplos de motivos existentes:
+${existingReasons}
+
+Gere novos motivos:`;
+
+                const responseText = await callGeminiAPI(prompt);
+                const newReasons = responseText.split('\n').filter(reason => reason.trim() !== "");
+
+                if (newReasons.length > 0) {
+                    newReasons.forEach(reason => {
+                        const li = document.createElement('li');
+                        li.textContent = reason.replace(/^- /,'').replace(/^\* /,''); 
+                        generatedReasonsList.appendChild(li);
+                    });
+                    generatedReasonsSection.style.display = "block";
+                } else {
+                    const li = document.createElement('li');
+                    li.textContent = "A IA não conseguiu gerar novos motivos desta vez. Tente novamente!";
+                    generatedReasonsList.appendChild(li);
+                    generatedReasonsSection.style.display = "block";
+                }
+                reasonsLoading.style.display = "none";
+                generateReasonsButton.disabled = false;
+            });
+        }
+    </script>
+</body>
+</html>
